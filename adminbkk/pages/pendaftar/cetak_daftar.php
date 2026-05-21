@@ -71,11 +71,11 @@ if (!$dat) {
     <table border="0" style="width:100%; border:none;">
         <tr>
 
-            <td style="width:120px; border:none;">
+            <!-- <td style="width:120px; border:none;">
                 <center>
                     <img src="../../img/logo_smkn7.png" width="90">
                 </center>
-            </td>
+            </td> -->
 
             <td style="border:none;">
                 <center>
