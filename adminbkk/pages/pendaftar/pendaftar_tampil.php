@@ -426,7 +426,7 @@ td .btn{
                 <th>Perusahaan</th>
                 <th>Loker</th>
                 <th>Berkas</th>
-                <th>Pilihan</th>
+                <!-- <th>Pilihan</th> -->
               </tr>
             </thead>
             <tbody>
@@ -457,15 +457,15 @@ td .btn{
                           class="btn btn-info btn-sm"><i class="fa fa-download"></i> Download</a><?php else: ?> -
                       <?php endif; ?>
                     </td>
-                    <td>
-                      <a href="?halaman=siswa_detail&kode=<?php echo $data['id_lamaran']; ?>"
+                    <!-- <td>
+                      <a href="?halaman=pendaftar_detail&kode=<?php echo $data['id_lamaran']; ?>"
                         class='btn btn-warning btn-sm'><i class="fa fa-link"></i></a>
                       <a href="?halaman=pendaftar_ubah&kode=<?php echo $data['id_lamaran']; ?>"
                         class='btn btn-warning btn-sm'><i class="fa fa-edit"></i></a>
                       <a href="?halaman=pendaftar_aksi&aksi=hapus&kode=<?php echo $data['id_lamaran']; ?>"
                         onclick="return confirm('Apakah anda yakin hapus data ini ?')" class='btn btn-danger btn-sm'><i
                           class="fa fa-trash"></i></a>
-                    </td>
+                    </td> -->
                   </tr>
                   <?php
                 }
