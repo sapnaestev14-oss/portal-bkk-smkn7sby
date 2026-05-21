@@ -1,155 +1,211 @@
 <?php
 include_once("../../koneksi.php");
-$query = $_POST['txttahun'];
-$sql_loker = mysqli_query($con, "Select DISTINCT tb_pendaftaran.id_loker, tb_loker.nm_perusahaan, tb_loker.nm_loker FROM tb_pendaftaran, tb_loker WHERE tb_pendaftaran.id_loker=tb_loker.id_loker AND tb_loker.id_loker LIKE'" . $query . "'");
-($dat = mysqli_fetch_array($sql_loker, MYSQLI_BOTH))
-    ?>
+
+// ambil id lowongan
+$id_lowongan = isset($_POST['txttahun']) 
+    ? mysqli_real_escape_string($con, $_POST['txttahun']) 
+    : '';
+
+if (empty($id_lowongan)) {
+    die("ID lowongan tidak ditemukan");
+}
+
+// ======================================================================
+// DATA LOWONGAN & PERUSAHAAN
+// ======================================================================
+
+$sql_loker = mysqli_query($con, "
+    SELECT 
+        lw.id_lowongan,
+        lw.judul_lowongan,
+        p.nama_perusahaan
+    FROM tb_lowongan lw
+    JOIN tb_perusahaan p 
+        ON lw.id_perusahaan = p.id_perusahaan
+    WHERE lw.id_lowongan = '$id_lowongan'
+");
+
+$dat = mysqli_fetch_assoc($sql_loker);
+
+if (!$dat) {
+    die("Data lowongan tidak ditemukan");
+}
+?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>DAFTAR PESERTA LOKER</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/sb-admin.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Cetak Data Pelamar</title>
 
     <style>
-        body {
+
+        body{
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size:12px;
+            color:black;
         }
 
-        table {
-            border-collapse: collapse;
+        table{
+            border-collapse:collapse;
+            width:100%;
         }
 
-        th {
-            background-color: #f2f2f2;
+        th, td{
+            border:1px solid black;
+            padding:6px;
         }
 
-        th,
-        td {
-            padding: 6px;
+        th{
+            background:#f2f2f2;
         }
 
-        @media print {
-            @page {
-                margin: 20mm;
-            }
-        }
     </style>
 
 </head>
 
-<body style=color:black;>
+<body>
 
+    <table border="0" style="width:100%; border:none;">
+        <tr>
 
-    <table border="0" cellspacing="0" cellpadding="0" width="100%">
-        <tbody>
-            <tr>
-                <td style="width:150px;">
-                    <center>
-                        <img src="img/logo_smkn7.png" width="110" height="110">
-                    </center>
-                </td>
-                <td>
-                    <center>
-                        <h2 style="margin:0;">BURSA KERJA KHUSUS (BKK)</h2>
-                        <h3 style="margin:0;"><b>SMK NEGERI 7 SURABAYA</b></h3>
-                        Jl. Pawiyatan No. 2, Surabaya<br>
-                        Jawa Timur<br>
-                        Email : bkk@smkn7sby.sch.id
-                    </center>
-                </td>
-            </tr>
-        </tbody>
+            <td style="width:120px; border:none;">
+                <center>
+                    <img src="../../img/logo_smkn7.png" width="90">
+                </center>
+            </td>
+
+            <td style="border:none;">
+                <center>
+
+                    <h2 style="margin:0;">
+                        BURSA KERJA KHUSUS (BKK)
+                    </h2>
+
+                    <h3 style="margin:0;">
+                        SMK NEGERI 7 SURABAYA
+                    </h3>
+
+                    Jl. Pawiyatan No. 2 Surabaya
+                    <br>
+                    Jawa Timur
+
+                </center>
+            </td>
+
+        </tr>
     </table>
 
     <hr style="border:2px solid black;">
 
-    <hr>
-    <br>
     <center>
-        <h3 style="margin-bottom:5px;">DAFTAR HADIR PESERTA REKRUTMEN</h3>
-        <h4 style="margin-top:0;">
-            <?php echo $dat['nm_perusahaan']; ?> -
-            <?php echo $dat['nm_loker']; ?>
+
+        <h3>
+            DAFTAR PELAMAR LOWONGAN KERJA
+        </h3>
+
+        <h4>
+            <?php echo htmlspecialchars($dat['nama_perusahaan']); ?>
+            -
+            <?php echo htmlspecialchars($dat['judul_lowongan']); ?>
         </h4>
+
     </center>
 
-    <table border="1" style="width: 100%">
-        <!-- <table border="1" width="700px"> -->
+    <br>
 
+    <table>
 
         <thead>
+
             <tr>
-                <th>No. </th>
-                <th>No. Pendaftaran</th>
+                <th>No</th>
+                <th>ID Lamaran</th>
                 <th>NISN</th>
-                <th>Nama</th>
+                <th>Nama Pelamar</th>
                 <th>Lowongan</th>
                 <th>Tanda Tangan</th>
-
             </tr>
-        </thead>
-        <tbody>
-            <?php
-            $no = 1;
-            $query = $_POST['txttahun'];
-            $sql_tampil = "SELECT tb_pendaftaran.id_pendaftaran, tb_peserta.nisn, tb_peserta.nama, tb_loker.nm_perusahaan, tb_loker.nm_loker, tb_pendaftaran.berkas FROM tb_pendaftaran, tb_peserta, tb_loker WHERE tb_pendaftaran.nisn=tb_peserta.nisn AND tb_pendaftaran.id_loker=tb_loker.id_loker AND tb_loker.id_loker LIKE'" . $query . "' ORDER BY id_pendaftaran ASC";
-            $query_tampil = mysqli_query($con, $sql_tampil);
-            while ($data = mysqli_fetch_array($query_tampil, MYSQLI_BOTH)) {
-                ?>
-                <tr>
-                    <td><?php echo $no; ?></td>
-                    <td style='text-align: center'><?php echo $data['id_pendaftaran']; ?></td>
-                    <td><?php echo $data['nisn']; ?></td>
-                    <td><?php echo $data['nama']; ?></td>
-                    <td><?php echo $data['nm_loker']; ?></td>
-                    <td style="height:40px;"></td>
-                </tr>
-                </center>
-                <?php
-                $no++;
-            }
-
-            ?>
-
-        </tbody>
-    </table>
-
-    <br>
-    <table border="0" cellspacing="0" cellpadding="0">
-        <thead>
 
         </thead>
+
         <tbody>
+
+        <?php
+
+        $no = 1;
+
+        $sql_tampil = mysqli_query($con, "
+            SELECT 
+                l.id_lamaran,
+                s.nisn,
+                s.nama,
+                lw.judul_lowongan
+            FROM tb_lamaran l
+            JOIN tb_siswa s 
+                ON l.id_siswa = s.id_siswa
+            JOIN tb_lowongan lw 
+                ON l.id_lowongan = lw.id_lowongan
+            WHERE lw.id_lowongan = '$id_lowongan'
+            ORDER BY l.id_lamaran ASC
+        ");
+
+        while($data = mysqli_fetch_assoc($sql_tampil)) {
+
+        ?>
+
             <tr>
-                <td style=width:1040px;></td>
-                <td style=width:330px;>
-                    <div style=text-align:center;><b>Kudus, <?php echo date("d-m-Y"); ?></b><br></div>
-                    <br>
-                    <center>KEPALA BKK SMK
-                        <br><br><br><br>
-                        <u><b>Arif Syaifudin, ST</b></u><br>
-                        Pembina Tingkat I<br>
-                        NIP : 0123456789
-                    </center>
+
+                <td style="text-align:center;">
+                    <?php echo $no++; ?>
                 </td>
+
+                <td style="text-align:center;">
+                    <?php echo htmlspecialchars($data['id_lamaran']); ?>
+                </td>
+
+                <td>
+                    <?php echo htmlspecialchars($data['nisn']); ?>
+                </td>
+
+                <td>
+                    <?php echo htmlspecialchars($data['nama']); ?>
+                </td>
+
+                <td>
+                    <?php echo htmlspecialchars($data['judul_lowongan']); ?>
+                </td>
+
+                <td style="height:40px;"></td>
+
             </tr>
+
+        <?php } ?>
+
         </tbody>
+
     </table>
-    </center>
-    <script>
-        window.print();
-    </script>
+
+    <br><br>
+
+    <div style="width:300px; float:right; text-align:center;">
+
+        Surabaya, <?php echo date("d-m-Y"); ?>
+        <br><br>
+
+        Kepala BKK SMKN 7 Surabaya
+
+        <br><br><br><br>
+
+        <b><u>Arif Syaifudin, ST</u></b>
+
+    </div>
+
+<script>
+window.print();
+</script>
 
 </body>
-
 </html>
