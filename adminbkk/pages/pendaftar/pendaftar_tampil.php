@@ -458,7 +458,7 @@ td .btn{
                       <?php endif; ?>
                     </td>
                     <td>
-                      <a href="?halaman=pendaftar_detail&kode=<?php echo $data['id_lamaran']; ?>"
+                      <a href="?halaman=siswa_detail&kode=<?php echo $data['id_lamaran']; ?>"
                         class='btn btn-warning btn-sm'><i class="fa fa-link"></i></a>
                       <a href="?halaman=pendaftar_ubah&kode=<?php echo $data['id_lamaran']; ?>"
                         class='btn btn-warning btn-sm'><i class="fa fa-edit"></i></a>

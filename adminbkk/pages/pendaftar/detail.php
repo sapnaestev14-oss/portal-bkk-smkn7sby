@@ -1,130 +1,53 @@
 <?php
-include_once("koneksi.php");
-
-// cek parameter kode
-if (!isset($_GET['kode']) || empty($_GET['kode'])) {
-    echo "<script>
-        alert('Data pendaftar tidak ditemukan!');
-        window.location='?halaman=pendaftar_tampil';
-    </script>";
-    exit;
-}
-
-$id_pendaftaran = mysqli_real_escape_string($con, $_GET['kode']);
-
-// query data pendaftar
-$sql = mysqli_query($con, "
-    SELECT 
-        l.id_lamaran,
-        s.nisn,
-        s.nama,
-        p.nama_perusahaan,
-        lw.judul_lowongan,
-        l.berkas
-    FROM tb_lamaran l
-    JOIN tb_siswa s 
-        ON l.id_siswa = s.id_siswa
-    JOIN tb_lowongan lw 
-        ON l.id_lowongan = lw.id_lowongan
-    JOIN tb_perusahaan p 
-        ON lw.id_perusahaan = p.id_perusahaan
-    WHERE l.id_lamaran = '$id_pendaftaran'
-");
-
-$tampil = mysqli_fetch_assoc($sql);
-
-// validasi data
-if (!$tampil) {
-    echo "<script>
-        alert('Data tidak ditemukan!');
-        window.location='?halaman=pendaftar_tampil';
-    </script>";
-    exit;
+if(isset($_GET['kode'])){
+    include_once("koneksi.php");
+    $sql = $con->query("SELECT tb_pendaftaran.id_pendaftaran, tb_peserta.nisn, tb_peserta.nama, tb_sekolah.nama_sekolah, tb_loker.nm_perusahaan, tb_pendaftaran.berkas FROM tb_pendaftaran, tb_peserta, tb_loker, tb_sekolah WHERE tb_pendaftaran.nisn=tb_peserta.nisn AND tb_pendaftaran.id_loker=tb_loker.id_loker AND tb_peserta.id_sekolah=tb_sekolah.id_sekolah AND id_pendaftaran='".$_GET['kode']."'");
+    $tampil = $sql->fetch_assoc();
 }
 ?>
-
 <br>
-
 <div class="card mb-3">
-
-    <div class="card-header">
-        <i class="fa fa-table"></i>
-        <b>Data Lengkap Pelamar : <?php echo htmlspecialchars($tampil['nama']); ?></b>
-    </div>
-
-    <div class="card-body">
-
-        <div class="panel-body">
-
-            <div class="table-responsive">
-
-                <table class="table table-striped">
-
-                    <tbody>
-
-                        <tr>
-                            <td>ID Lamaran</td>
-                            <td width="80%">
-                                : <?php echo htmlspecialchars($tampil['id_lamaran']); ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>NISN</td>
-                            <td>
-                                : <?php echo htmlspecialchars($tampil['nisn']); ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Nama Pelamar</td>
-                            <td>
-                                : <?php echo htmlspecialchars($tampil['nama']); ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Perusahaan</td>
-                            <td>
-                                : <?php echo htmlspecialchars($tampil['nama_perusahaan']); ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Lowongan</td>
-                            <td>
-                                : <?php echo htmlspecialchars($tampil['judul_lowongan']); ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Berkas</td>
-                            <td>
-                                : <?php echo htmlspecialchars($tampil['berkas']); ?>
-
-                                <?php if (!empty($tampil['berkas'])) { ?>
-                                    &nbsp;
-
-                                    <a href="pages/pendaftar/download.php?filename=<?php echo urlencode($tampil['berkas']); ?>">
-                                        <i class="fa fa-download"></i> Download
-                                    </a>
-
-                                <?php } ?>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-                <a href="?halaman=pendaftar_tampil" class="btn btn-primary">
-                    Kembali
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+<div class="card-header">
+  <i class="fa fa-table"></i> <b>Data Lengkap Pendaftar  : <?php echo $tampil['nama'];?></b> </div>
+<div class="card-body">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                <tbody>
+                                        <tr>
+                                            <td>ID Pendaftar</td>                                          
+                                            <td width="80%">: <?php echo $tampil['id_pendaftaran'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NISN</td>                                          
+                                            <td width="80%">: <?php echo $tampil['nisn'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Pendaftar</td>                                          
+                                            <td width="80%">: <?php echo $tampil['nama'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Asal Sekolah</td>
+                                            <td>: <?php echo $tampil['nama_sekolah'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Perusahaan</td>
+                                            <td>: <?php echo $tampil['nm_perusahaan'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Berkas</td>
+                                            <td>: <?php echo $tampil['berkas'];?> &nbsp;
+                                            <td>
+                                            <a href="pages/pendaftar/download.php?filename=<?=$data['berkas'];?>"><i class="fa fa-download"></i></a>	
+                                            </td>
+                                            </td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="?halaman=pendaftar_tampil" class="btn btn-primary">Kembali</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
