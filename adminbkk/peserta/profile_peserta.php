@@ -51,7 +51,9 @@ if (isset($_POST['simpan_personal'])) {
     $nama = $_POST['nama'] ?? '';
     $jekel = $_POST['jekel'] ?? '';
     $tempat_lhr = $_POST['tempat_lahir'] ?? '';
-    $tgl_lhr = $_POST['tanggal_lahir'] ?? '';
+    $tgl_lhr = !empty($_POST['tanggal_lahir']) 
+    ? mysqli_real_escape_string($con, $_POST['tanggal_lahir']) 
+    : NULL;
     $nik = $_POST['nik'] ?? '';
     $email = $_POST['email'] ?? '';
     $alamat = $_POST['alamat'] ?? '';
@@ -70,7 +72,7 @@ if (isset($_POST['simpan_personal'])) {
         nama='$nama',
         jekel='$jekel',
         tempat_lahir='$tempat_lhr',
-        tanggal_lahir='$tgl_lhr',
+        tanggal_lahir=" . ($tgl_lhr ? "'$tgl_lhr'" : "NULL") . ",
         nik='$nik',
         alamat='$alamat',
         email='$email',
