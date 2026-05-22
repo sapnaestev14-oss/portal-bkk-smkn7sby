@@ -63,7 +63,9 @@ if (isset($_POST['simpan_personal'])) {
     $tinggi = $_POST['tinggi_badan'] ?? '';
     $berat = $_POST['berat_badan'] ?? '';
     $jurusan = $_POST['jurusan'] ?? '';
-    $tahun_lulus = $_POST['tahun_lulus'] ?? '';
+    $tahun_lulus = !empty($_POST['tahun_lulus']) 
+    ? mysqli_real_escape_string($con, $_POST['tahun_lulus']) 
+    : NULL;
     $deskripsi = $_POST['deskripsi'] ?? '';
     $prestasi = $_POST['prestasi'] ?? '';
 
@@ -82,7 +84,7 @@ if (isset($_POST['simpan_personal'])) {
         tinggi_badan='$tinggi',
         berat_badan='$berat',
         jurusan='$jurusan',
-        tahun_lulus='$tahun_lulus',
+        tahun_lulus=" . ($tahun_lulus ? "'$tahun_lulus'" : "NULL") . ",
         deskripsi='$deskripsi',
         prestasi='$prestasi'
         WHERE id_siswa='$id_siswa'
