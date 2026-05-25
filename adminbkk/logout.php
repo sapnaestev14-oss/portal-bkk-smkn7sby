@@ -22,6 +22,6 @@ if (ini_get("session.use_cookies")) {
 }
 
 // redirect ke login
-header("Location: peserta.php");
+header("Location: ../index.php");
 exit;
 ?>
