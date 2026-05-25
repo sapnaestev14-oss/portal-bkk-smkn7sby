@@ -79,7 +79,7 @@ if (isset($_POST['simpan_perusahaan'])) {
 
         if (mysqli_num_rows($cek) > 0) {
 
-            echo "<script>alert('Username perusahaan sudah ada!');</script>";
+            echo "<script>alert('Akun sudah ada!');</script>";
 
         } else {
 
