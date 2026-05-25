@@ -78,7 +78,7 @@ if($tampil['logo']=="" || $tampil['logo']==NULL){
 }else{
 
     if($data_status=="perusahaan"){
-        $foto_user="dist/img/foto_perusahaan/".$tampil['logo'];
+        $foto_user="./dist/img/foto_perusahaan/".$tampil['logo'];
     }else{
         $foto_user="dist/img/foto_user/".$tampil['foto'];
     }
@@ -810,7 +810,7 @@ class="btn-icon btn-delete">
 
 <?php if(!empty($tampil['file_nib'])){ ?>
 
-<a href="dokumen/<?php echo $tampil['file_nib']; ?>" target="_blank" class="doc-btn">
+<a href="./dokumen/<?php echo urlencode($tampil['file_nib']); ?>" target="_blank" class="doc-btn">
 Lihat Dokumen
 </a>
 
@@ -852,7 +852,7 @@ Upload
 
 <?php if(!empty($tampil['file_npwp'])){ ?>
 
-<a href="dokumen/<?php echo $tampil['file_npwp']; ?>" target="_blank" class="doc-btn">
+<a href="./dokumen/<?php echo urlencode($tampil['file_npwp']); ?>" target="_blank" class="doc-btn">
 Lihat Dokumen
 </a>
 
@@ -893,7 +893,7 @@ Upload
 
 <?php if(!empty($tampil['file_mou'])){ ?>
 
-<a href="dokumen/<?php echo $tampil['file_mou']; ?>" target="_blank" class="doc-btn">
+<a href="./dokumen/<?php echo urlencode($tampil['file_mou']); ?>" target="_blank" class="doc-btn">
 Lihat Dokumen
 </a>
 
