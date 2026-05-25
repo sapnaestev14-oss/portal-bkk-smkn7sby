@@ -5,7 +5,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 if (!isset($_SESSION['ses_nisn']) || empty($_SESSION['ses_nisn'])) {
-  header("Location: ../peserta.php");
+  header("Location: ../../index.php");
   exit;
 } else {
   $data_nisn = $_SESSION["ses_nisn"];
