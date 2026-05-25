@@ -810,7 +810,7 @@ class="btn-icon btn-delete">
 
 <?php if(!empty($tampil['file_nib'])){ ?>
 
-<a href="adminbkk/dokumen/<?php echo $tampil['file_nib']; ?>" target="_blank" class="doc-btn">
+<a href="dokumen/<?php echo $tampil['file_nib']; ?>" target="_blank" class="doc-btn">
 Lihat Dokumen
 </a>
 
