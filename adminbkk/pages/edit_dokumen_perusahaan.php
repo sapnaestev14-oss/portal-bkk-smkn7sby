@@ -252,7 +252,7 @@ Belum ada file dipilih
 <br>
 
 <a 
-href="dokumen/<?= urlencode($file_lama) ?>" 
+href="dokumen/<?= htmlspecialchars($file_lama) ?>"
 target="_blank" 
 class="btn btn-primary"
 >
@@ -346,10 +346,14 @@ if(isset($_POST['upload'])){
     }
 
     // nama file aman
-    $nama_baru = time() . '_' . uniqid() . '.' . $ext;
+    $nama_asli = pathinfo($nama, PATHINFO_FILENAME);
+
+$nama_asli = preg_replace("/[^a-zA-Z0-9_-]/", "_", $nama_asli);
+
+$nama_baru = time() . '_' . $nama_asli . '.' . $ext;
 
     // path absolut railway/linux
-    $folder = __DIR__ . "/dokumen/";
+   $folder = $_SERVER['DOCUMENT_ROOT'] . "/adminbkk/dokumen/";
 
     // buat folder jika belum ada
     if(!file_exists($folder)){
@@ -381,24 +385,32 @@ if(isset($_POST['upload'])){
 
         if(mysqli_num_rows($cek) > 0){
 
-            mysqli_query($con,"
-                UPDATE tb_dokumen_perusahaan 
-                SET `$kolom`='$nama_baru'
-                WHERE id_perusahaan='$id_perusahaan'
-            ");
+            $query = mysqli_query($con,"
+UPDATE tb_dokumen_perusahaan 
+SET `$kolom`='$nama_baru'
+WHERE id_perusahaan='$id_perusahaan'
+");
+
+if(!$query){
+    echo mysqli_error($con);
+}
 
         } else {
 
-            mysqli_query($con,"
-                INSERT INTO tb_dokumen_perusahaan
-                (
-                    id_perusahaan,
-                    `$kolom`
-                ) VALUES (
-                    '$id_perusahaan',
-                    '$nama_baru'
-                )
-            ");
+            $insert = mysqli_query($con,"
+INSERT INTO tb_dokumen_perusahaan
+(
+    id_perusahaan,
+    `$kolom`
+) VALUES (
+    '$id_perusahaan',
+    '$nama_baru'
+)
+");
+
+if(!$insert){
+    die(mysqli_error($con));
+}
         }
 
         echo "<script>
