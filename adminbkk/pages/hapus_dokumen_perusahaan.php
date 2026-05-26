@@ -5,8 +5,11 @@ if (session_status() == PHP_SESSION_NONE) {
 
 include_once "koneksi.php";
 
-// cek session login
-if (!isset($_SESSION['ses_username'])) {
+// ===============================
+// CEK LOGIN
+// ===============================
+if (!isset($_SESSION['ses_username']) || empty($_SESSION['ses_username'])) {
+
     echo "<script>
         alert('Silakan login terlebih dahulu!');
         window.location='login.php';
@@ -16,21 +19,21 @@ if (!isset($_SESSION['ses_username'])) {
 
 $data_username = mysqli_real_escape_string($con, $_SESSION['ses_username']);
 
-// validasi parameter tipe
-if (!isset($_GET['tipe']) || empty($_GET['tipe'])) {
-    echo "<script>
-        alert('Tipe dokumen tidak valid!');
-        window.history.back();
-    </script>";
-    exit;
-}
+// ===============================
+// VALIDASI PARAMETER TIPE
+// ===============================
+$tipe = $_GET['tipe'] ?? '';
 
-$tipe = mysqli_real_escape_string($con, $_GET['tipe']);
+$allowed_tipe = [
+    'cv',
+    'ijazah',
+    'skhun',
+    'foto',
+    'dokumen'
+];
 
-// daftar field yang diizinkan
-$allowed_tipe = ['cv', 'ijazah', 'skhun', 'foto', 'dokumen'];
+if (empty($tipe) || !in_array($tipe, $allowed_tipe)) {
 
-if (!in_array($tipe, $allowed_tipe)) {
     echo "<script>
         alert('Akses ditolak!');
         window.history.back();
@@ -38,10 +41,18 @@ if (!in_array($tipe, $allowed_tipe)) {
     exit;
 }
 
-// ambil data user
-$query = mysqli_query($con, "SELECT * FROM tb_user WHERE username='$data_username'");
+// ===============================
+// AMBIL DATA USER
+// ===============================
+$query = mysqli_query(
+    $con,
+    "SELECT * FROM tb_user 
+     WHERE username='$data_username' 
+     LIMIT 1"
+);
 
 if (!$query || mysqli_num_rows($query) == 0) {
+
     echo "<script>
         alert('Data user tidak ditemukan!');
         window.history.back();
@@ -51,31 +62,55 @@ if (!$query || mysqli_num_rows($query) == 0) {
 
 $data = mysqli_fetch_assoc($query);
 
+// ===============================
+// AMBIL NAMA FILE
+// ===============================
 $file = $data[$tipe] ?? '';
 
-// path absolut agar aman di Railway/Linux
-$folder_dokumen = __DIR__ . "/dokumen/";
+// ===============================
+// PATH FOLDER DOKUMEN
+// ===============================
+$folder_dokumen = $_SERVER['DOCUMENT_ROOT'] . "/adminbkk/dokumen/";
+
 $file_path = $folder_dokumen . $file;
 
-/* hapus file dari folder */
-if (!empty($file) && file_exists($file_path)) {
-    unlink($file_path);
+// ===============================
+// HAPUS FILE FISIK
+// ===============================
+if (!empty($file)) {
+
+    if (file_exists($file_path)) {
+
+        unlink($file_path);
+    }
 }
 
-/* kosongkan database */
+// ===============================
+// KOSONGKAN DATABASE
+// ===============================
 $update = mysqli_query(
     $con,
-    "UPDATE tb_user SET `$tipe`='' WHERE username='$data_username'"
+    "UPDATE tb_user 
+     SET `$tipe`='' 
+     WHERE username='$data_username'"
 );
 
+// ===============================
+// HASIL PROSES
+// ===============================
 if ($update) {
+
     echo "<script>
         alert('Dokumen berhasil dihapus');
         window.location='?halaman=profile&tab=dokumen#dokumen';
     </script>";
+
 } else {
+
+    $error = mysqli_error($con);
+
     echo "<script>
-        alert('Gagal menghapus dokumen!');
+        alert('Gagal menghapus dokumen!\\n$error');
         window.history.back();
     </script>";
 }
