@@ -1,7 +1,7 @@
 <?php
 // loker_tambah.php - Handler Tambah Lowongan
 session_start();
-include_once("../../koneksi.php");
+include_once("koneksi.php");
 
 // ============================================================================
 // 🔧 STEP 1: VALIDASI SESSION
