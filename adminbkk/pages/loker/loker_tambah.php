@@ -1,6 +1,8 @@
 <?php
 // loker_tambah.php - Handler Tambah Lowongan
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 include_once("koneksi.php");
 
 // ============================================================================
