@@ -126,7 +126,7 @@ if ($data_status == "admin" || $data_status == "Ka. BKK" || $data_status == "") 
 html,
 body{
   width:100%;
-  overflow-x:hidden;
+  overflow-x:auto;
   font-family:'Segoe UI',sans-serif;
   background:#f4f6f9;
 }
@@ -457,7 +457,7 @@ td .btn{
                           class="btn btn-info btn-sm"><i class="fa fa-download"></i> Download</a><?php else: ?> -
                       <?php endif; ?>
                     </td>
-                    <!-- <td>
+                    <td>
                       <a href="?halaman=pendaftar_detail&kode=<?php echo $data['id_lamaran']; ?>"
                         class='btn btn-warning btn-sm'><i class="fa fa-link"></i></a>
                       <a href="?halaman=pendaftar_ubah&kode=<?php echo $data['id_lamaran']; ?>"
@@ -465,7 +465,7 @@ td .btn{
                       <a href="?halaman=pendaftar_aksi&aksi=hapus&kode=<?php echo $data['id_lamaran']; ?>"
                         onclick="return confirm('Apakah anda yakin hapus data ini ?')" class='btn btn-danger btn-sm'><i
                           class="fa fa-trash"></i></a>
-                    </td> -->
+                    </td>
                   </tr>
                   <?php
                 }
@@ -1810,7 +1810,7 @@ td .btn{
       }
     }
 
-    function confirmDelete(id) { if (confirm("Apakah anda yakin ingin menghapus pendaftar ini?")) { window.location = "?halaman=pendaftar_aksi&kode=" + id; } }
+    
     function formatDate(dateStr) { if (!dateStr || dateStr === '0000-00-00' || dateStr === 'NULL') return '-'; return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }); }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -1827,5 +1827,20 @@ td .btn{
       search.addEventListener("keyup", filterData); filter.addEventListener("change", filterData);
     });
   </script>
+
+<script>
+
+function confirmDelete(id){
+
+    if(confirm('Apakah yakin ingin menghapus data pelamar ini?')){
+
+        window.location =
+        'pages/pendaftar/pendaftar_aksi.php?aksi=hapus&kode=' + id;
+
+    }
+
+}
+
+</script>
 
 <?php } ?>
