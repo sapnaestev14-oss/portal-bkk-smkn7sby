@@ -705,6 +705,29 @@ td .btn{
       animation: fadeInUp 0.6s ease forwards;
     }
 
+    @media (max-width:768px){
+
+  .applicant-card{
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    padding-right: 8px;
+  }
+
+  .applicant-card::-webkit-scrollbar{
+    width:4px;
+  }
+
+  .applicant-card::-webkit-scrollbar-thumb{
+    background:#b8b8b8;
+    border-radius:10px;
+  }
+
+}
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
