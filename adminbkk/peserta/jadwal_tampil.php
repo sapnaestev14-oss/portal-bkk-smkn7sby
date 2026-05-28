@@ -403,10 +403,10 @@ ON tb_jadwal.id_lowongan = tb_lowongan.id_lowongan
 INNER JOIN tb_perusahaan 
 ON tb_jadwal.id_perusahaan = tb_perusahaan.id_perusahaan
 
-INNER JOIN tb_pelamar 
-ON tb_lowongan.id_lowongan = tb_pelamar.id_lowongan
+INNER JOIN tb_lamaran 
+ON tb_lowongan.id_lowongan = tb_lamaran.id_lowongan
 
-WHERE tb_pelamar.id_siswa = '$id_siswa'
+WHERE tb_lamaran.id_siswa = '$id_siswa'
 AND tb_jadwal.status != 'dibatalkan'
 
 ORDER BY tb_jadwal.tanggal ASC
