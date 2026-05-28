@@ -371,18 +371,46 @@ include_once("../koneksi.php");
                     <tbody>
                         <?php
                         // PERBAIKAN QUERY SESUAI DATABASE BARU
-                        $sql_tampil = "SELECT 
-                tb_jadwal.id_jadwal, 
-                tb_perusahaan.nama_perusahaan, 
-                tb_lowongan.judul_lowongan,
-                tb_jadwal.tanggal, 
-                tb_jadwal.lokasi, 
-                tb_jadwal.waktu 
-               FROM tb_jadwal
-               INNER JOIN tb_perusahaan ON tb_jadwal.id_perusahaan = tb_perusahaan.id_perusahaan
-               LEFT JOIN tb_lowongan ON tb_jadwal.id_lowongan = tb_lowongan.id_lowongan
-               WHERE tb_jadwal.status != 'dibatalkan'
-               ORDER BY tb_jadwal.tanggal ASC";
+                       // ambil username login
+$username = $_SESSION['ses_username'] ?? '';
+
+// ambil data siswa
+$get_siswa = mysqli_query($con, "
+    SELECT id_siswa 
+    FROM tb_siswa 
+    WHERE nisn='$username'
+");
+
+$data_siswa = mysqli_fetch_assoc($get_siswa);
+
+$id_siswa = $data_siswa['id_siswa'] ?? 0;
+
+// query jadwal khusus lowongan yang dilamar siswa
+$sql_tampil = "
+SELECT 
+    tb_jadwal.id_jadwal,
+    tb_perusahaan.nama_perusahaan,
+    tb_lowongan.judul_lowongan,
+    tb_jadwal.tanggal,
+    tb_jadwal.lokasi,
+    tb_jadwal.waktu
+
+FROM tb_jadwal
+
+INNER JOIN tb_lowongan 
+ON tb_jadwal.id_lowongan = tb_lowongan.id_lowongan
+
+INNER JOIN tb_perusahaan 
+ON tb_jadwal.id_perusahaan = tb_perusahaan.id_perusahaan
+
+INNER JOIN tb_pelamar 
+ON tb_lowongan.id_lowongan = tb_pelamar.id_lowongan
+
+WHERE tb_pelamar.id_siswa = '$id_siswa'
+AND tb_jadwal.status != 'dibatalkan'
+
+ORDER BY tb_jadwal.tanggal ASC
+";
 
                         $query_tampil = mysqli_query($con, $sql_tampil);
 
