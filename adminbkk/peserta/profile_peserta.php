@@ -1,6 +1,25 @@
 <?php
 require_once "../koneksi.php";
 if (!isset($_GET['id_siswa'])) {
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    $nisn = $_SESSION['ses_nisn'] ?? '';
+
+    $cari = mysqli_query($con, "
+        SELECT id_siswa
+        FROM tb_siswa
+        WHERE nisn='$nisn'
+        LIMIT 1
+    ");
+
+    if ($row = mysqli_fetch_assoc($cari)) {
+        header("Location:?halaman=profile_peserta&id_siswa=".$row['id_siswa']);
+        exit;
+    }
+
     echo "Data tidak ditemukan";
     exit;
 }

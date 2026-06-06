@@ -59,10 +59,16 @@ if (isset($_POST['btnDaftar'])) {
     if (!empty($profil['foto'])) $persen += 10;
     if ($tracer && !empty($tracer['id_tracer'])) $persen += 20;
     
-    if ($persen < 100) {
-        echo "<script>alert('⚠️ Profil belum lengkap (".$persen."%). Lengkapi profil dulu!'); window.location='?halaman=profile_peserta';</script>";
-        exit;
-    }
+   if ($persen < 100) {
+
+    $id_siswa = $profil['id_siswa'];
+
+    echo "<script>
+        alert('⚠️ Profil belum lengkap (".$persen."%). Lengkapi profil terlebih dahulu!');
+        window.location='?halaman=profile_peserta&id_siswa=".$id_siswa."&tab=personal';
+    </script>";
+    exit;
+}
     
     // Cek apakah sudah melamar
     $cek_lamaran = mysqli_query($con, "SELECT * FROM tb_lamaran WHERE id_siswa='$id_siswa' AND id_lowongan='$id_lowongan'");
