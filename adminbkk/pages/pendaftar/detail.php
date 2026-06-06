@@ -1,7 +1,7 @@
 <?php
 if(isset($_GET['kode'])){
     include_once("koneksi.php");
-    $sql = $con->query("SELECT tb_pendaftaran.id_pendaftaran, tb_peserta.nisn, tb_peserta.nama, tb_sekolah.nama_sekolah, tb_loker.nm_perusahaan, tb_pendaftaran.berkas FROM tb_pendaftaran, tb_peserta, tb_loker, tb_sekolah WHERE tb_pendaftaran.nisn=tb_peserta.nisn AND tb_pendaftaran.id_loker=tb_loker.id_loker AND tb_peserta.id_sekolah=tb_sekolah.id_sekolah AND id_pendaftaran='".$_GET['kode']."'");
+    $sql = $con->query("SELECT tb_lamaran.id_lamaran, tb_peserta.nisn, tb_peserta.nama, tb_sekolah.nama_sekolah, tb_loker.nm_perusahaan, tb_lamaran.berkas FROM tb_lamaran, tb_peserta, tb_loker, tb_sekolah WHERE tb_lamaran.nisn=tb_peserta.nisn AND tb_lamaran.id_loker=tb_loker.id_loker AND tb_peserta.id_sekolah=tb_sekolah.id_sekolah AND id_pendaftaran='".$_GET['kode']."'");
     $tampil = $sql->fetch_assoc();
 }
 ?>
