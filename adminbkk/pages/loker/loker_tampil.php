@@ -7,6 +7,28 @@ if ($data_status == "admin" || $data_status == "Ka. BKK") {
     JOIN tb_perusahaan p ON l.id_perusahaan = p.id_perusahaan
     ORDER BY l.batas_lamaran DESC
 ");
+
+ // ================= BULLET LIST =================
+    function bulletList($text)
+    {
+        $items = preg_split('/\r\n|\r|\n/', trim($text));
+
+        $html = "<ul style='padding-left:20px; margin:0;'>";
+
+        foreach ($items as $item) {
+            $item = trim($item);
+
+            if ($item != "") {
+                $item = ltrim($item, "•-* ");
+                $html .= "<li>" . htmlspecialchars($item) . "</li>";
+            }
+        }
+
+        $html .= "</ul>";
+
+        return $html;
+    }
+
     $selected_id = isset($_GET['detail']) ? trim($_GET['detail']) : "";
 
     $data_detail = null;
@@ -1489,14 +1511,14 @@ if ($data_status == "admin" || $data_status == "Ka. BKK") {
                             <b>🛠️ Tugas & Tanggung Jawab</b>
                         </h4>
                         <p style="color:#555; line-height:1.8;">
-                            <?php echo nl2br($data_detail['deskripsi']); ?>
+                            <?php echo bulletList($data_detail['deskripsi']); ?>
                         </p>
 
                         <h4 style="color:#2d3748; font-weight:700; margin:25px 0 15px 0;">
-                            <b>✅ Kualifikasi</b>
+                            <b>🎯 Kualifikasi</b>
                         </h4>
                         <p style="color:#555; line-height:1.8;">
-                            <?php echo nl2br($data_detail['jenis_pekerjaan']); ?>
+                            <?php echo bulletList($data_detail['kualifikasi']); ?>
                         </p>
 
                         <h4 style="color:#2d3748; font-weight:700; margin:25px 0 15px 0;">
@@ -1504,13 +1526,6 @@ if ($data_status == "admin" || $data_status == "Ka. BKK") {
                         </h4>
                         <p style="color:#555; line-height:1.8;">
                             <?php echo nl2br($data_detail['lokasi']); ?>
-                        </p>
-
-                        <h4 style="color:#2d3748; font-weight:700; margin:25px 0 15px 0;">
-                            <b>🎯 Jenis Pekerjaan</b>
-                        </h4>
-                        <p style="color:#555; line-height:1.8;">
-                            <?php echo nl2br($data_detail['kualifikasi']); ?>
                         </p>
 
                         <h4 style="color:#2d3748; font-weight:700; margin:25px 0 15px 0;">
