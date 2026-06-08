@@ -62,12 +62,11 @@ if (mysqli_num_rows($cek) > 0) {
 
         echo "<script>alert('✅ Akun siswa berhasil dibuat!'); window.location='?halaman=data_user';</script>";
         exit;
-
-    } else {
-
-        die(mysqli_error($con));
-    }
-}
+            } else {
+                echo "<script>alert('❌ Gagal membuat akun!');</script>";
+                die(mysqli_error($con));
+            }
+        }
     }
 }
 
