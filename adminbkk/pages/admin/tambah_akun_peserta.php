@@ -21,41 +21,53 @@ if (isset($_POST['simpan'])) {
         $role = "siswa";
 
         // cek username di tb_user
-        $cek = mysqli_query($con, "SELECT username FROM tb_user WHERE username='$nisn'");
+$cek = mysqli_query($con, "SELECT username FROM tb_user WHERE username='$nisn'");
 
-        if (mysqli_num_rows($cek) > 0) {
+if (mysqli_num_rows($cek) > 0) {
 
-            echo "<script>alert('Akun sudah ada');</script>";
+    echo "<script>alert('Akun sudah ada');</script>";
 
-        } else {
+} else {
 
-            // insert ke tb_user
-            $insert = mysqli_query($con, "INSERT INTO tb_user (username,password,role) 
-            VALUES ('$nisn','$password','$role')");
+    // ambil nama siswa
+    $get_siswa = mysqli_query($con, "SELECT nama FROM tb_siswa WHERE nisn='$nisn'");
+    $data_siswa = mysqli_fetch_assoc($get_siswa);
 
-            if ($insert) {
+    if (!$data_siswa) {
+        echo "<script>alert('Data siswa tidak ditemukan!');</script>";
+        exit;
+    }
 
-                // 🔥 AMBIL ID USER TERAKHIR
-                $id_user = mysqli_insert_id($con);
+    $nama = mysqli_real_escape_string($con, $data_siswa['nama']);
 
-                // 🔥 CEK DI tb_siswa (BIAR TIDAK DOUBLE)
-                $cek_siswa = mysqli_query($con, "SELECT * FROM tb_siswa WHERE nisn='$nisn'");
+    // insert user
+    $insert = mysqli_query($con, "
+    INSERT INTO tb_user (nama, username, password, role)
+    VALUES ('$nama','$nisn','$password','$role')
+    ");
 
-                if (mysqli_num_rows($cek_siswa) == 0) {
+    if ($insert) {
 
-                    // 🔥 INSERT KE tb_siswa (WAJIB)
-                    mysqli_query($con, "INSERT INTO tb_siswa (id_user, nisn) 
-                    VALUES ('$id_user','$nisn')");
-                }
+        $id_user = mysqli_insert_id($con);
 
-                echo "<script>alert('✅ Akun siswa berhasil dibuat!'); window.location='?halaman=data_user';</script>";
-                exit;
+        $cek_siswa = mysqli_query($con, "SELECT * FROM tb_siswa WHERE nisn='$nisn'");
 
-            } else {
-                echo "<script>alert('❌ Gagal membuat akun!');</script>";
-                die(mysqli_error($con));
-            }
+        if (mysqli_num_rows($cek_siswa) == 0) {
+
+            mysqli_query($con, "
+            INSERT INTO tb_siswa (id_user, nisn)
+            VALUES ('$id_user','$nisn')
+            ");
         }
+
+        echo "<script>alert('✅ Akun siswa berhasil dibuat!'); window.location='?halaman=data_user';</script>";
+        exit;
+
+    } else {
+
+        die(mysqli_error($con));
+    }
+}
     }
 }
 
