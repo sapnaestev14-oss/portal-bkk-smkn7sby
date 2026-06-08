@@ -21,6 +21,27 @@ if (!$data) {
     echo "<p style='color:red;'>Data tidak ditemukan.</p>";
     exit;
 }
+
+function bulletList($text)
+{
+    $items = preg_split('/\r\n|\r|\n/', trim($text));
+
+    $html = "<ul style='padding-left:20px;margin:0;'>";
+
+    foreach ($items as $item) {
+
+        $item = trim($item);
+
+        if ($item != '') {
+            $item = ltrim($item, "•-* ");
+            $html .= "<li>" . htmlspecialchars($item) . "</li>";
+        }
+    }
+
+    $html .= "</ul>";
+
+    return $html;
+}
 ?>
 
 <h3 style="margin-top:0;"><b><?php echo htmlspecialchars($data['judul_lowongan']); ?></b></h3>
@@ -91,14 +112,14 @@ if (!$data) {
 <?php if (!empty($data['deskripsi'])) { ?>
     <h4><b>📝 Deskripsi Pekerjaan</b></h4>
     <p style="text-align:justify;">
-        <?php echo nl2br(htmlspecialchars($data['deskripsi'])); ?>
+        <?php echo bulletList(htmlspecialchars($data['deskripsi'])); ?>
     </p>
 <?php } ?>
 
 <?php if (!empty($data['kualifikasi'])) { ?>
     <h4><b>✅ Kualifikasi</b></h4>
     <p style="text-align:justify;">
-        <?php echo nl2br(htmlspecialchars($data['kualifikasi'])); ?>
+        <?php echo bulletList(htmlspecialchars($data['kualifikasi'])); ?>
     </p>
 <?php } ?>
 

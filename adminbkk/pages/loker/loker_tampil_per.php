@@ -130,11 +130,19 @@ $data_nama = $dataUser['nama_perusahaan'];
                         <div class="form-group">
                             <label>Deskripsi Pekerjaan</label>
                             <textarea class="form-control" name="txtdeskripsi" rows="4" placeholder="Tugas dan tanggung jawab..." required></textarea>
+                            <small style="color:#777;">
+                            <i class="fa fa-info-circle"></i>
+                            Isi setiap poin pada baris baru (tekan Enter per poin).
+                        </small>
                         </div>
                         
                         <div class="form-group">
                             <label>Kualifikasi</label>
                             <textarea class="form-control" name="txtkualifikasi" rows="4" placeholder="Persyaratan kandidat..." required></textarea>
+                        <small style="color:#777;">
+                            <i class="fa fa-info-circle"></i>
+                            Isi setiap poin pada baris baru (tekan Enter per poin).
+                        </small>
                         </div>
                         
                         <div class="form-group">
